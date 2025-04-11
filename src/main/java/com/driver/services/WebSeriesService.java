@@ -28,7 +28,7 @@ public class WebSeriesService {
         //Dont forget to save the production and webseries Repo
         WebSeries existingWebSeries = webSeriesRepository.findBySeriesName(webSeriesEntryDto.getSeriesName());
         if(existingWebSeries !=null){
-            throw new RuntimeException("Series is already present");
+            throw new Exception("Series is already present");
         }
         WebSeries webSeries = new WebSeries(webSeriesEntryDto.getSeriesName(),webSeriesEntryDto.getAgeLimit(),webSeriesEntryDto.getRating(),webSeriesEntryDto.getSubscriptionType());
         ProductionHouse productionHouse = productionHouseRepository.findById(webSeriesEntryDto.getProductionHouseId()).orElseThrow(()-> new IllegalArgumentException("Production with the ID not found"));;

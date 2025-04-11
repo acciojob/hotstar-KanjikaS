@@ -25,25 +25,28 @@ public class SubscriptionService {
     public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
 
         //Save The subscription Object into the Db and return the total Amount that user has to pay
+        User user = userRepository.findById(subscriptionEntryDto.getUserId()).orElseThrow(() -> new Exception("User not found with id: " + subscriptionEntryDto.getUserId()));
         Date startDate = new Date();
         int finalAmount;
         SubscriptionType subType = subscriptionEntryDto.getSubscriptionType();
         int noOfScreens = subscriptionEntryDto.getNoOfScreensRequired();
 
         if(subType==SubscriptionType.BASIC){
-            finalAmount = (200*noOfScreens)+500;
+            finalAmount = (200 * noOfScreens)+500;
         } else if (subType==SubscriptionType.PRO) {
-            finalAmount = (250*noOfScreens)+800;
+            finalAmount = (250 * noOfScreens)+800;
         } else if (subType==SubscriptionType.ELITE) {
-            finalAmount = (350*noOfScreens)+1000;
+            finalAmount = (350 * noOfScreens)+1000;
         }
         else{
             finalAmount=0;
         }
-        User user = userRepository.findById(subscriptionEntryDto.getUserId()).orElseThrow(()-> new IllegalArgumentException("User with the ID not found"));
         Subscription subscription = new Subscription(subType,noOfScreens,startDate,finalAmount);
         subscription.setUser(user);
+        user.setSubscription(subscription);
         subscriptionRepository.save(subscription);
+        userRepository.save(user);
+
 
         return finalAmount;
     }
@@ -71,7 +74,7 @@ public class SubscriptionService {
             subscription.setTotalAmountPaid(updatedAmount);
             balance = updatedAmount-finalAmount;
         } else if (subType==SubscriptionType.ELITE) {
-            throw new RuntimeException("Already the best Subscription");
+            throw new Exception("Already the best Subscription");
         }
         else{
             balance=0;

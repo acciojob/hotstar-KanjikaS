@@ -27,7 +27,7 @@ public class Subscription {
     private int totalAmountPaid;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn
     private User user;
 
     public Subscription(SubscriptionType subscriptionType, int noOfScreensSubscribed, Date startSubscriptionDate, int totalAmountPaid) {
