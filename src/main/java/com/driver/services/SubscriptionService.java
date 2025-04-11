@@ -22,7 +22,7 @@ public class SubscriptionService {
     @Autowired
     UserRepository userRepository;
 
-    public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto){
+    public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto) throws Exception {
 
         //Save The subscription Object into the Db and return the total Amount that user has to pay
         User user = userRepository.findById(subscriptionEntryDto.getUserId()).orElseThrow(() -> new Exception("User not found with id: " + subscriptionEntryDto.getUserId()));
