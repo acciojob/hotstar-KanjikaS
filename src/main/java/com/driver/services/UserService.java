@@ -41,8 +41,7 @@ public class UserService {
         int noOfSeriesAllowedToView = 0;
         for(WebSeries webSeries : webSeriesList){
             if(user.getSubscription()==null || webSeries.getSubscriptionType()==null||user.getSubscription().getSubscriptionType()==null){
-                continue;
-                //pass
+                return 0;
             }
             if((user.getAge() >= webSeries.getAgeLimit()) && (user.getSubscription().getSubscriptionType().ordinal() >= webSeries.getSubscriptionType().ordinal()))
             {

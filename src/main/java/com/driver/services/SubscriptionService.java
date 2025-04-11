@@ -31,11 +31,11 @@ public class SubscriptionService {
         int noOfScreens = subscriptionEntryDto.getNoOfScreensRequired();
 
         if(subType==SubscriptionType.BASIC){
-            finalAmount = 200*noOfScreens+500;
+            finalAmount = (200*noOfScreens)+500;
         } else if (subType==SubscriptionType.PRO) {
-            finalAmount = 250*noOfScreens+800;
+            finalAmount = (250*noOfScreens)+800;
         } else if (subType==SubscriptionType.ELITE) {
-            finalAmount = 350*noOfScreens+1000;
+            finalAmount = (350*noOfScreens)+1000;
         }
         else{
             finalAmount=0;
