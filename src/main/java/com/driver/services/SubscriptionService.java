@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubscriptionService {
@@ -22,10 +23,20 @@ public class SubscriptionService {
     @Autowired
     UserRepository userRepository;
 
-    public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto) throws Exception {
+    public Integer buySubscription(SubscriptionEntryDto subscriptionEntryDto) {
 
-        //Save The subscription Object into the Db and return the total Amount that user has to pay
-        User user = userRepository.findById(subscriptionEntryDto.getUserId()).orElseThrow(() -> new Exception("User not found with id: " + subscriptionEntryDto.getUserId()));
+        if(subscriptionEntryDto.getSubscriptionType() == null){
+            return null;
+        }
+        if(subscriptionEntryDto.getNoOfScreensRequired() <= 0){
+            return null;
+        }
+        if(subscriptionRepository.findSubscriptionByUserId(subscriptionEntryDto.getUserId()).isPresent()) return null;
+
+        User user = userRepository.findById(subscriptionEntryDto.getUserId()).orElse(null);
+        if (user == null){
+            return null;
+        }
         Date startDate = new Date();
         int finalAmount;
         SubscriptionType subType = subscriptionEntryDto.getSubscriptionType();
@@ -46,9 +57,9 @@ public class SubscriptionService {
         user.setSubscription(subscription);
         subscriptionRepository.save(subscription);
         userRepository.save(user);
+        if(subscription.getId() > 0) return subscription.getTotalAmountPaid();
 
-
-        return finalAmount;
+        return null;
     }
 
     public Integer upgradeSubscription(Integer userId)throws Exception{
@@ -56,7 +67,10 @@ public class SubscriptionService {
         //If you are already at an ElITE subscription : then throw Exception ("Already the best Subscription")
         //In all other cases just try to upgrade the subscription and tell the difference of price that user has to pay
         //update the subscription in the repository
-        Subscription subscription = subscriptionRepository.findSubscriptionByUserId(userId);
+        Subscription subscription = subscriptionRepository.findSubscriptionByUserId(userId).orElse(null);
+        if(subscription==null){
+            return null;
+        }
         SubscriptionType subType = subscription.getSubscriptionType();
         int noOfScreens = subscription.getNoOfScreensSubscribed();
         int finalAmount = subscription.getTotalAmountPaid();
