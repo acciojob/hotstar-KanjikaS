@@ -91,7 +91,7 @@ public class SubscriptionService {
             throw new Exception("Already the best Subscription");
         }
         else{
-            balance=0;
+            return null;
         }
         subscriptionRepository.save(subscription);
         return balance;

@@ -25,9 +25,9 @@ public class UserService {
     public Integer addUser(User user){
 
         //Jut simply add the user to the Db and return the userId returned by the repository
-        User newUser = userRepository.save(user);
-        if(userRepository.findById(newUser.getId()).isPresent()){
-            return newUser.getId();
+        User savedUser = userRepository.save(user);
+        if (savedUser.getId()>0) {
+            return savedUser.getId();
         }
         return null;
     }

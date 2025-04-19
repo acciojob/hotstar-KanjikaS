@@ -38,8 +38,8 @@ public class WebSeriesService {
         productionHouse.getWebSeriesList().add(webSeries);
         productionHouse.setRatings(finalRating);
         productionHouseRepository.save(productionHouse);
-        webSeriesRepository.save(webSeries);
-
+        WebSeries savedWebseries = webSeriesRepository.save(webSeries);
+        if(savedWebseries.getId()>0) return savedWebseries.getId();
         return null;
     }
 
